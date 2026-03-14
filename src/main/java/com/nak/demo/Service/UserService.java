@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ public class UserService {
     }
     public ResponseEntity<BaseResponseModel> createUser(UserModel payload){
         User user = new User();
-        user.setName(payload.getName());
+        user.setUserName(payload.getName());
         user.setAddress(payload.getAddress());
         user.setAge(payload.getAge());
         user.setEmail(payload.getEmail());
@@ -64,7 +65,7 @@ public class UserService {
                    .body(new BaseResponseModel("Fail","user not found with id: " +userId));
        }
        User updatedUser = existing.get();
-       updatedUser.setName(payload.getName());
+       updatedUser.setUserName(payload.getName());
        updatedUser.setAge(payload.getAge());
        updatedUser.setAddress(payload.getAddress());
        updatedUser.setRole(payload.getRole());
@@ -86,5 +87,13 @@ public class UserService {
         // 200 OK
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseModel("success","successfully deleted user"));
+    }
+    public ResponseEntity<BaseResponseModelWithData> findUser(String name){
+        String formattedName = name  !=null ?
+                name.toLowerCase()
+                :name;
+        List<User> user = userRepository.findUserWithFilters(formattedName);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponseModelWithData("success","successfully retrieved User", user));
     }
 }

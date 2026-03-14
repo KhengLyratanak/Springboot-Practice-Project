@@ -45,7 +45,12 @@ public class UserController {
     public  ResponseEntity<BaseResponseModel> deleteUser(@PathVariable("user_id") Long userId){
       return userService.deleteUser(userId);
     }
-
+    @GetMapping("/search")
+    public ResponseEntity<BaseResponseModelWithData> findUser(
+      @RequestParam( value = "name", required = false) String name
+    ){
+        return userService.findUser(name);
+    }
 
 
 
