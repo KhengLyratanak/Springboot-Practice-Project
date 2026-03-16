@@ -2,18 +2,11 @@ package com.nak.demo.Controller;
 
 import com.nak.demo.Model.BaseResponseModel;
 import com.nak.demo.Model.BaseResponseModelWithData;
-import com.nak.demo.Model.UserModel;
-import com.nak.demo.Model.UserResponseModel;
+import com.nak.demo.dto.UserDto;
 import com.nak.demo.Service.UserService;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -31,13 +24,13 @@ public class UserController {
         return userService.getUser(userId);
     }
     @PostMapping
-    public ResponseEntity<BaseResponseModel> createUser(@RequestBody UserModel payload) {
+    public ResponseEntity<BaseResponseModel> createUser(@RequestBody UserDto payload) {
         return userService.createUser( payload);
     }
 
     @PutMapping("/{user_id}")
     public ResponseEntity<BaseResponseModel> updateUser(@PathVariable("user_id") Long userId,
-                                                        @RequestBody UserModel payload) {
+                                                        @RequestBody UserDto payload) {
         return userService.updateUser( payload,userId);
     }
 

@@ -1,16 +1,14 @@
-package com.nak.demo.Model;
+package com.nak.demo.dto;
 
-import jakarta.persistence.*;
-import jdk.jfr.DataAmount;
 import lombok.*;
 
-import java.security.PublicKey;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserModel {
+public class UserDto {
     private  Long id;
     private String name;
+    private String password;
     private Integer age;
     private String address;
     private  String email;

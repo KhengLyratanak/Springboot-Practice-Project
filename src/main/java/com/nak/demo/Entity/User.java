@@ -13,12 +13,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String email;
+
+    private String password;
     @Column(name = "user_name")
     private String userName;
     private Integer age;
     private String address;
-    private String role;
-
+    private String role="USER";
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
