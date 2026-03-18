@@ -34,7 +34,7 @@ public class UserService {
         List<User> users = userRepository.findAll();
         List<UserResponseDto> dtos = mapper.toDtoList(users);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new BaseResponseModelWithData("success","successfully retrieve user",users));
+                .body(new BaseResponseModelWithData("success","successfully retrieve user",dtos));
     }
     public ResponseEntity<BaseResponseModelWithData> getUser(Long userId){
         Optional<User> user = userRepository.findById(userId);
@@ -44,9 +44,17 @@ public class UserService {
         }
         UserResponseDto dto = mapper.toDto(user.get());
             return ResponseEntity.status(HttpStatus.OK)
-                    .body(new BaseResponseModelWithData("success","user found : ",user.get()));
+                    .body(new BaseResponseModelWithData("success","user found : ",dto));
     }
     public ResponseEntity<BaseResponseModel> createUser(UserDto payload){
+        if(userRepository.existsByName(payload.getName())){
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new BaseResponseModel("fail","username is existed"));
+        }
+        if (userRepository.existsByEmail(payload.getEmail())){
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new BaseResponseModel("fail","email is existed"));
+        }
         User user = mapper.toEntity(payload);
 
         userRepository.save(user);
@@ -63,11 +71,8 @@ public class UserService {
                    .body(new BaseResponseModel("Fail","user not found with id: " +userId));
        }
        User updatedUser = existing.get();
-       updatedUser.setUserName(payload.getName());
-       updatedUser.setAge(payload.getAge());
-       updatedUser.setAddress(payload.getAddress());
-       updatedUser.setRole(payload.getRole());
-       updatedUser.setEmail(payload.getEmail());
+      mapper.updateEntityFromDto(updatedUser,payload);
+
        userRepository.save(updatedUser);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseModel("success","successfully updated user"));

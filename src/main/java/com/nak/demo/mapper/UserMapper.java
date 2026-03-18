@@ -15,7 +15,7 @@ public class UserMapper {
     public User toEntity(UserDto dto){
         User entity = new User();
 
-        entity.setUserName(dto.getName());
+        entity.setName(dto.getName());
         entity.setPassword(dto.getPassword());
         entity.setRole(dto.getRole());
         entity.setAge(dto.getAge());
@@ -24,15 +24,27 @@ public class UserMapper {
         entity.setCreatedAt(LocalDateTime.now());
         return entity;
     }
+    public void updateEntityFromDto(User entity, UserDto dto){
+        if (entity == null || dto == null){
+            return;
+        }
+        entity.setName(dto.getName());
+        entity.setEmail(dto.getEmail());
+        entity.setPassword(dto.getPassword());
+        entity.setRole(dto.getRole());
+        entity.setAddress(dto.getAddress());
+    }
     public UserResponseDto toDto(User entity){
         UserResponseDto dto = new UserResponseDto();
 
+        dto.setId(entity.getId());
         dto.setRole(entity.getRole());
-        dto.setUserName(entity.getUserName());
+        dto.setUserName(entity.getName());
         dto.setAge(entity.getAge() );
         dto.setEmail(entity.getEmail());
         dto.setAddress(entity.getAddress());
-
+        dto.setCreatedAt(entity.getCreatedAt());
+        dto.setUpdatedAt(entity.getUpdatedAt());
             return dto;
 
     }
