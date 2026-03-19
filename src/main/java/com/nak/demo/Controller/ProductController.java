@@ -2,10 +2,9 @@ package com.nak.demo.Controller;
 
 import com.nak.demo.Model.BaseResponseModel;
 import com.nak.demo.Model.BaseResponseModelWithData;
-import com.nak.demo.Model.ProductModel;
+import com.nak.demo.dto.ProductDto;
 import com.nak.demo.Service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,11 +31,11 @@ public class ProductController {
        return productService.searchProduct(name,minPrice,maxPrice);
     }
     @PostMapping()
-    public ResponseEntity<BaseResponseModel> createProduct(@RequestBody ProductModel payload){
+    public ResponseEntity<BaseResponseModel> createProduct(@RequestBody ProductDto payload){
         return productService.createProduct(payload);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<BaseResponseModel> updateProduct(@PathVariable("id") Long productId,@RequestBody ProductModel payload){
+    public ResponseEntity<BaseResponseModel> updateProduct(@PathVariable("id") Long productId,@RequestBody ProductDto payload){
         return productService.updateProduct(productId,payload);
     }
     @DeleteMapping("/{id}")
