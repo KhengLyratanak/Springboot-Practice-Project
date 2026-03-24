@@ -1,4 +1,4 @@
-package com.nak.demo.dto;
+package com.nak.demo.dto.product;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

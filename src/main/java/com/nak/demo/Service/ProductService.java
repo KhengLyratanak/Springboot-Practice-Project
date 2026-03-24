@@ -2,17 +2,16 @@ package com.nak.demo.Service;
 
 import com.nak.demo.Entity.Product;
 import com.nak.demo.Model.BaseResponseModel;
-import com.nak.demo.dto.ProductDto;
+import com.nak.demo.dto.product.ProductDto;
 import com.nak.demo.Model.BaseResponseModelWithData;
 import com.nak.demo.Repository.ProductRepository;
-import com.nak.demo.dto.ProductResponseDto;
+import com.nak.demo.dto.product.ProductResponseDto;
 import com.nak.demo.mapper.ProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -45,10 +44,15 @@ public class ProductService {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseModelWithData("success","product found",product.get()));
     }
-    public ResponseEntity<BaseResponseModel> createProduct(ProductDto payload){
-       Product product = mapper.toEntity(payload);
+    public ResponseEntity<BaseResponseModel> createProduct(ProductDto product){
+       //validate if product is already exists
+        if (productRepository.existsByProductName(product.getName())){
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new BaseResponseModel("fail","product is already existed"));
+        }
+        Product productEntity = mapper.toEntity(product);
 
-        productRepository.save(product);
+        productRepository.save(productEntity);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new BaseResponseModel("success","Successfully Created Product"));
     }
