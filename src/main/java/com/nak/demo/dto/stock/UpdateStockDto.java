@@ -1,9 +1,9 @@
-package com.nak.demo.Model;
+package com.nak.demo.dto.stock;
 
 import lombok.Data;
 
 @Data
-public class UpdateStockModel {
+public class  UpdateStockDto {
     private Integer operationType;
     private Long quantity;
 }

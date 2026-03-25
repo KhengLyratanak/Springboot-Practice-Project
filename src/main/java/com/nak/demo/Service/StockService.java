@@ -1,8 +1,10 @@
 package com.nak.demo.Service;
 
+import com.nak.demo.Entity.Product;
 import com.nak.demo.Entity.Stock;
 import com.nak.demo.Model.BaseResponseModel;
 import com.nak.demo.Model.BaseResponseModelWithData;
+import com.nak.demo.Repository.ProductRepository;
 import com.nak.demo.dto.stock.StockDto;
 import com.nak.demo.dto.stock.UpdateStockDto;
 import com.nak.demo.Repository.StockRepository;
@@ -22,6 +24,10 @@ public class StockService {
     private StockRepository stockRepository;
     @Autowired
     private StockMapper mapper;
+
+    @Autowired
+    private ProductRepository productRepository;
+
     public ResponseEntity<BaseResponseModelWithData> listStocks() {
         List<Stock> stocks = stockRepository.findAll();
         List<StockResponseDto> dtos = mapper.toDtoList(stocks);
@@ -42,9 +48,16 @@ public class StockService {
     }
 
 
-    public ResponseEntity<BaseResponseModel> createdStocks(StockDto payload) {
-        Stock stock = mapper.toEntity(payload);
-        stockRepository.save(stock);
+    public ResponseEntity<BaseResponseModel> createdStocks(StockDto stock) {
+       //product not found
+        if(!productRepository.existsById(stock.getProductId())) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new BaseResponseModel("fail", "product not found :"+stock.getProductId())
+                    );
+
+        }
+        Stock stockEntity = mapper.toEntity(stock);
+        stockRepository.save(stockEntity);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new BaseResponseModel("success", "successfully created stock"));
     }
