@@ -49,14 +49,16 @@ public class StockService {
 
 
     public ResponseEntity<BaseResponseModel> createdStocks(StockDto stock) {
+        Optional<Product> existingProduct = productRepository.findById
+                (stock.getProductId());
        //product not found
-        if(!productRepository.existsById(stock.getProductId())) {
+        if(existingProduct.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new BaseResponseModel("fail", "product not found :"+stock.getProductId())
-                    );
-
+                    .body(new BaseResponseModel("fail", "product not found :"+stock.getProductId
+                            ()));
         }
-        Stock stockEntity = mapper.toEntity(stock);
+
+        Stock stockEntity = mapper.toEntity(stock,existingProduct.get());
         stockRepository.save(stockEntity);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new BaseResponseModel("success", "successfully created stock"));
