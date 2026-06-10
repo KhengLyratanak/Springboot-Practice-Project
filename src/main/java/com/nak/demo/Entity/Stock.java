@@ -14,9 +14,6 @@ public class Stock {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "product_id")
-    private Long productId;
-
     private Long quantity;
 
     @Column(name = "created_at")
@@ -24,6 +21,9 @@ public class Stock {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
+    private Product product;
 
     @PrePersist
     public void createdAt(){
