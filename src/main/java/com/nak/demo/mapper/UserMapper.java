@@ -1,8 +1,8 @@
 package com.nak.demo.mapper;
 
 import com.nak.demo.Entity.User;
-import com.nak.demo.dto.UserDto;
-import com.nak.demo.dto.UserResponseDto;
+import com.nak.demo.dto.user.UserDto;
+import com.nak.demo.dto.user.UserResponseDto;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;

@@ -3,17 +3,16 @@ package com.nak.demo.Service;
 import com.nak.demo.Entity.User;
 import com.nak.demo.Model.BaseResponseModel;
 import com.nak.demo.Model.BaseResponseModelWithData;
-import com.nak.demo.dto.UserDto;
+import com.nak.demo.dto.user.UserDto;
 import com.nak.demo.Repository.UserRepository;
 
-import com.nak.demo.dto.UserResponseDto;
+import com.nak.demo.dto.user.UserResponseDto;
 import com.nak.demo.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

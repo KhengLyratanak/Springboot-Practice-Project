@@ -1,4 +1,4 @@
-package com.nak.demo.dto;
+package com.nak.demo.dto.user;
 
 import lombok.*;
 

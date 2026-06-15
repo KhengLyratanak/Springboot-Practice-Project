@@ -2,7 +2,7 @@ package com.nak.demo.Controller;
 
 import com.nak.demo.Model.BaseResponseModel;
 import com.nak.demo.Model.BaseResponseModelWithData;
-import com.nak.demo.dto.UserDto;
+import com.nak.demo.dto.user.UserDto;
 import com.nak.demo.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
