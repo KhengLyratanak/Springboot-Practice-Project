@@ -23,69 +23,66 @@ import java.util.Optional;
 public class SupplierService {
     @Autowired
     private SupplierRepository supplierRepository;
+
     @Autowired
     private SupplierMapper mapper;
 
-    public ResponseEntity<BaseResponseModel> createdSupplier(SupplierDto payload) {
-        if (supplierRepository.existsByName(payload.getName())) {
+    public ResponseEntity<BaseResponseModelWithData> listSuppliers() {
+        List<Supplier> suppliers = supplierRepository.findAll();
 
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(
+                        new BaseResponseModelWithData(
+                                "success",
+                                "successfully retrieved suppliers",
+                                mapper.toDtoList(suppliers)
+                        )
+                );
+    }
+
+    public ResponseEntity<BaseResponseModel> createSupplier(SupplierDto dto) {
+        // if duplicate supplier name , then reject
+        if(supplierRepository.existsByName(dto.getName())) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(new BaseResponseModel(
-                            "fail",
-                            "supplier name already existed"));
+                    .body(new BaseResponseModel("fail","supplier already existed with name: " + dto.getName()));
         }
-        Supplier supplier = mapper.toEntity(payload);
+
+        Supplier supplier = mapper.toEntity(dto);
+
         supplierRepository.save(supplier);
 
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new BaseResponseModel(
-                        "Success",
-                        "successfully created Supplier"));
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponseModel("success","successfully created supplier"));
     }
 
-    public ResponseEntity<BaseResponseModelWithData> listSuppliers() {
-        List<Supplier> supplier = supplierRepository.findAll();
-        List<SupplierResponseDto> dtos = mapper.toDtoList(supplier);
+    public ResponseEntity<BaseResponseModel> updateSupplier(Long supplierId, SupplierDto dto) {
+        Optional<Supplier> existingSupplier = supplierRepository.findById(supplierId);
+
+        // if supplier not found, return 404
+        if(existingSupplier.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new BaseResponseModel("fail","supplier not found with id: " + supplierId));
+        }
+
+        Supplier supplier = existingSupplier.get();
+        mapper.updateEntityFromDto(supplier,dto);
+
+        supplierRepository.save(supplier);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new BaseResponseModelWithData(
-                        "Success",
-                        "successfully retrieved supplier"
-                        , supplier));
+                .body(new BaseResponseModel("success","successfully updated supplier"));
     }
 
-    public ResponseEntity<BaseResponseModel> updateSuppliers(SupplierDto dto, Long supplierId) {
-        Optional<Supplier> existing = supplierRepository.findById(supplierId);
-
-        if (existing.isEmpty()) {
+    public ResponseEntity<BaseResponseModel> deleteSupplier(Long supplierId) {
+        if(!supplierRepository.existsById(supplierId)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new BaseResponseModel(
-                            "fail",
-                            "supplier not found with id :" + supplierId));
+                    .body(new BaseResponseModel("fail","supplier not found with id: " + supplierId));
         }
-        Supplier updateSuppliers = existing.get();
-        mapper.updateEntityFromDto(updateSuppliers, dto);
-        supplierRepository.save(updateSuppliers);
 
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(new BaseResponseModel(
-                        "success",
-                        "successfully updated supplier"));
-
-    }
-    public ResponseEntity<BaseResponseModel> deleteSupplier(Long supplierId){
-        if (!supplierRepository.existsById(supplierId)){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new BaseResponseModel(
-                            "fail",
-                            "supplier not found with id:"+supplierId));
-        }
         supplierRepository.deleteById(supplierId);
 
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(new BaseResponseModel(
-                            "success",
-                            "successfully deleted supplier id:"+supplierId));
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponseModel("success","successfully deleted supplier"));
     }
 
 }

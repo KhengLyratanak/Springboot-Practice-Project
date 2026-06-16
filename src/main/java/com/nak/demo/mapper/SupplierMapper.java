@@ -11,49 +11,53 @@ import java.util.stream.Collectors;
 
 @Component
 public class SupplierMapper {
-    public Supplier toEntity(SupplierDto dto){
+    public Supplier toEntity(SupplierDto dto) {
         Supplier entity = new Supplier();
 
         entity.setName(dto.getName());
         entity.setAddress(dto.getAddress());
+        entity.setPhone(dto.getPhone());
         entity.setEmail(dto.getEmail());
         entity.setRating(dto.getRating());
-        entity.setPhone(dto.getPhone());
 
         return entity;
     }
-    public SupplierResponseDto toDto(Supplier entity){
-        if (entity == null){
-            return null;
-        }
+
+    public SupplierResponseDto toDto(Supplier entity) {
         SupplierResponseDto dto = new SupplierResponseDto();
 
         dto.setId(entity.getId());
-        dto.setName(entity.getName());
-        dto.setEmail(entity.getEmail());
-        dto.setRating(entity.getRating());
+        dto.setSupplierName(entity.getName());
         dto.setAddress(entity.getAddress());
         dto.setPhone(entity.getPhone());
-        dto.setCreatedAt(dto.getCreatedAt());
-        dto.setUpdatedAt(dto.getUpdatedAt());
+        dto.setEmail(entity.getEmail());
+        dto.setRating(entity.getRating());
+        dto.setCreatedAt(entity.getCreatedAt());
+        dto.setUpdatedAt(entity.getUpdatedAt());
+
         return dto;
     }
-    public void updateEntityFromDto(Supplier entity, SupplierDto dto){
-        if (entity == null || dto == null){
-            return;
-        }
-        entity.setName(dto.getName());
-        entity.setAddress(dto.getAddress());
-        entity.setEmail(dto.getEmail());
-        entity.setRating(dto.getRating());
-        entity.setPhone(dto.getPhone());
-    }
-    public List<SupplierResponseDto> toDtoList(List<Supplier> entities){
-        if (entities == null || entities.isEmpty()){
+
+    public List<SupplierResponseDto> toDtoList(List<Supplier> entities) {
+        if(entities == null || entities.isEmpty()) {
             return new ArrayList<>();
         }
-        return entities.stream()
+
+        return entities
+                .stream()
                 .map(supplier -> this.toDto(supplier))
                 .collect(Collectors.toList());
+    }
+
+    public void updateEntityFromDto(Supplier entity, SupplierDto dto) {
+        if(entity == null || dto == null) {
+            return;
+        }
+
+        entity.setName(dto.getName());
+        entity.setAddress(dto.getAddress());
+        entity.setRating(dto.getRating());
+        entity.setEmail(dto.getEmail());
+        entity.setPhone(dto.getPhone());
     }
 }

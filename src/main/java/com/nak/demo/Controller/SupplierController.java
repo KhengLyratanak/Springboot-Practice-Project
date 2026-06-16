@@ -14,21 +14,26 @@ public class SupplierController {
         @Autowired
         private SupplierService supplierService;
 
-        @GetMapping
-       public ResponseEntity<BaseResponseModelWithData> listSupplier(){
-            return supplierService.listSuppliers();
-        }
+    @GetMapping
+    public ResponseEntity<BaseResponseModelWithData> listSuppliers() {
+        return supplierService.listSuppliers();
+    }
 
-        @PostMapping
-        public ResponseEntity<BaseResponseModel> createSupplier(@RequestBody SupplierDto dto){
-            return supplierService.createdSupplier(dto);
-        }
+    @PostMapping
+    public ResponseEntity<BaseResponseModel> createSupplier(@RequestBody SupplierDto payload) {
+        return supplierService.createSupplier(payload);
+    }
 
-        @PutMapping({"supplier_id"})
-        public ResponseEntity<BaseResponseModel> updateSupplier
-                (@PathVariable ("supplier_id") Long supplierId ,
-                 @RequestBody SupplierDto payload){
-            return supplierService.updateSuppliers(payload,supplierId);
-        }
+    @PutMapping("{supplier_id}")
+    public ResponseEntity<BaseResponseModel> updateSupplier(
+            @PathVariable("supplier_id") Long supplierId,
+            @RequestBody SupplierDto payload
+    ) {
+        return supplierService.updateSupplier(supplierId,payload);
+    }
 
+    @DeleteMapping("{supplier_id}")
+    public ResponseEntity<BaseResponseModel> deleteSupplier(@PathVariable("supplier_id") Long supplierId) {
+        return supplierService.deleteSupplier(supplierId);
+    }
 }
