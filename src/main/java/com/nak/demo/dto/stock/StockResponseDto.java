@@ -6,7 +6,7 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 @Data
-@JsonPropertyOrder({"stock_id","product_if","qty","created_at","updated_at"})
+@JsonPropertyOrder({"stock_id","product_id","qty","created_at","updated_at"})
 public class StockResponseDto {
     @JsonProperty("stock_id")
     private Long id;

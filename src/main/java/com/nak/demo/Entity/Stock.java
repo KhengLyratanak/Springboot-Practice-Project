@@ -21,12 +21,15 @@ public class Stock {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "supplier_id")
     private Supplier supplier;
+
     @PrePersist
     public void createdAt(){
         this.createdAt = LocalDateTime.now();
