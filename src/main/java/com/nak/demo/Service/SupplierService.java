@@ -2,22 +2,19 @@ package com.nak.demo.Service;
 
 import com.nak.demo.Model.BaseResponseModel;
 import com.nak.demo.Model.BaseResponseModelWithData;
+import com.nak.demo.exception.model.DuplicateException;
+import com.nak.demo.exception.model.ResourceNotFoundException;
 import com.nak.demo.Repository.SupplierRepository;
-import com.nak.demo.dto.stock.UpdateStockDto;
 import com.nak.demo.dto.supplier.SupplierDto;
-import com.nak.demo.dto.supplier.SupplierResponseDto;
 import com.nak.demo.mapper.SupplierMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.nak.demo.Entity.Supplier;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class SupplierService {
@@ -43,8 +40,7 @@ public class SupplierService {
     public ResponseEntity<BaseResponseModel> createSupplier(SupplierDto dto) {
         // if duplicate supplier name , then reject
         if(supplierRepository.existsByName(dto.getName())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(new BaseResponseModel("fail","supplier already existed with name: " + dto.getName()));
+                throw new DuplicateException("supplier already existed");
         }
 
         Supplier supplier = mapper.toEntity(dto);
@@ -56,18 +52,15 @@ public class SupplierService {
     }
 
     public ResponseEntity<BaseResponseModel> updateSupplier(Long supplierId, SupplierDto dto) {
-        Optional<Supplier> existingSupplier = supplierRepository.findById(supplierId);
+        Supplier existingSupplier = supplierRepository.findById(supplierId)
 
         // if supplier not found, return 404
-        if(existingSupplier.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new BaseResponseModel("fail","supplier not found with id: " + supplierId));
-        }
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("supplier not found with :"  +supplierId));
 
-        Supplier supplier = existingSupplier.get();
-        mapper.updateEntityFromDto(supplier,dto);
+        mapper.updateEntityFromDto(existingSupplier,dto);
 
-        supplierRepository.save(supplier);
+        supplierRepository.save(existingSupplier);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseModel("success","successfully updated supplier"));
@@ -75,8 +68,7 @@ public class SupplierService {
 
     public ResponseEntity<BaseResponseModel> deleteSupplier(Long supplierId) {
         if(!supplierRepository.existsById(supplierId)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new BaseResponseModel("fail","supplier not found with id: " + supplierId));
+           throw new ResourceNotFoundException("supplier not found with id:"  +supplierId);
         }
 
         supplierRepository.deleteById(supplierId);

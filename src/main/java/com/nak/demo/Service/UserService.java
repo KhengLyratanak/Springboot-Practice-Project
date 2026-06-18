@@ -3,6 +3,8 @@ package com.nak.demo.Service;
 import com.nak.demo.Entity.User;
 import com.nak.demo.Model.BaseResponseModel;
 import com.nak.demo.Model.BaseResponseModelWithData;
+import com.nak.demo.exception.model.DuplicateException;
+import com.nak.demo.exception.model.ResourceNotFoundException;
 import com.nak.demo.dto.user.UserDto;
 import com.nak.demo.Repository.UserRepository;
 
@@ -13,10 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -25,9 +24,6 @@ public class UserService {
 
     @Autowired
     private UserMapper mapper;
-    private List<UserDto> users = new ArrayList<>(Arrays.asList(
-            new UserDto(1L,"mad","",23,"PP","","")
-    ));
 
     public ResponseEntity<BaseResponseModelWithData> listUser(){
         List<User> users = userRepository.findAll();
@@ -36,19 +32,16 @@ public class UserService {
                 .body(new BaseResponseModelWithData("success","successfully retrieve user",dtos));
     }
     public ResponseEntity<BaseResponseModelWithData> getUser(Long userId){
-        Optional<User> user = userRepository.findById(userId);
-        if (user.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new BaseResponseModelWithData("fail","user not found with id :" +userId,"null"));
-        }
-        UserResponseDto dto = mapper.toDto(user.get());
+        User user = userRepository.findById(userId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("user not found with id :"  +userId));
+
             return ResponseEntity.status(HttpStatus.OK)
-                    .body(new BaseResponseModelWithData("success","user found : ",dto));
+                    .body(new BaseResponseModelWithData("success","user found : ",userId));
     }
     public ResponseEntity<BaseResponseModel> createUser(UserDto payload){
         if(userRepository.existsByName(payload.getName())){
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(new BaseResponseModel("fail","username is existed"));
+             throw new DuplicateException("user already existed");
         }
         if (userRepository.existsByEmail(payload.getEmail())){
             return ResponseEntity.status(HttpStatus.CONFLICT)
@@ -63,24 +56,21 @@ public class UserService {
                 .body(new BaseResponseModel("success","successfully created user"));
     }
     public ResponseEntity<BaseResponseModel> updateUser(UserDto payload, Long userId){
-       Optional<User> existing = userRepository.findById(userId);
+       User existing = userRepository.findById(userId)
 //IF USER NOT FOUND then response 404
-       if (existing.isEmpty()){
-           return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                   .body(new BaseResponseModel("Fail","user not found with id: " +userId));
-       }
-       User updatedUser = existing.get();
-      mapper.updateEntityFromDto(updatedUser,payload);
+        .orElseThrow(() ->
+             new ResourceNotFoundException("user not found with id :"  +userId ));
 
-       userRepository.save(updatedUser);
+      mapper.updateEntityFromDto(existing,payload);
+
+       userRepository.save(existing);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseModel("success","successfully updated user"));
     }
     public ResponseEntity<BaseResponseModel> deleteUser( Long userId) {
 
         if(!userRepository.existsById(userId)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new BaseResponseModel("fail","user not found with id: " + userId));
+            throw new ResourceNotFoundException("user not found with id :"  +userId);
         }
 
         // user found , then delete

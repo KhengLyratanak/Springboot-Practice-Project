@@ -2,9 +2,12 @@ package com.nak.demo.Controller;
 
 import com.nak.demo.Model.BaseResponseModel;
 import com.nak.demo.Model.BaseResponseModelWithData;
+import com.nak.demo.exception.model.DuplicateException;
+import com.nak.demo.exception.model.ResourceNotFoundException;
 import com.nak.demo.dto.product.ProductDto;
 import com.nak.demo.Service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,31 +18,36 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping()
-    public ResponseEntity<BaseResponseModelWithData> listProduct(){
+    public ResponseEntity<BaseResponseModelWithData> listProduct() {
         return productService.listProduct();
     }
+
     @GetMapping("/{id}")
-    public ResponseEntity<BaseResponseModelWithData> getProduct(@PathVariable("id") Long productId){
+    public ResponseEntity<BaseResponseModelWithData> getProduct(@PathVariable("id") Long productId) {
         return productService.getProduct(productId);
     }
+
     @GetMapping("/search")
     public ResponseEntity<BaseResponseModelWithData> seaerchProducts(
-            @RequestParam(value = "name",required = false) String name,
-            @RequestParam(value = "minPrice",required = false) Double minPrice,
+            @RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "minPrice", required = false) Double minPrice,
             @RequestParam(value = "maxPrice", required = false) Double maxPrice
-    ){
-       return productService.searchProduct(name,minPrice,maxPrice);
+    ) {
+        return productService.searchProduct(name, minPrice, maxPrice);
     }
+
     @PostMapping()
-    public ResponseEntity<BaseResponseModel> createProduct(@RequestBody ProductDto payload){
+    public ResponseEntity<BaseResponseModel> createProduct(@RequestBody ProductDto payload) {
         return productService.createProduct(payload);
     }
+
     @PutMapping("/{id}")
-    public ResponseEntity<BaseResponseModel> updateProduct(@PathVariable("id") Long productId,@RequestBody ProductDto payload){
-        return productService.updateProduct(productId,payload);
+    public ResponseEntity<BaseResponseModel> updateProduct(@PathVariable("id") Long productId, @RequestBody ProductDto payload) {
+        return productService.updateProduct(productId, payload);
     }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<BaseResponseModel> deleteProduct(@PathVariable("id") Long productId){
+    public ResponseEntity<BaseResponseModel> deleteProduct(@PathVariable("id") Long productId) {
         return productService.deleteProduct(productId);
     }
 }

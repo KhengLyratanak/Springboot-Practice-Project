@@ -2,10 +2,12 @@ package com.nak.demo.Controller;
 
 import com.nak.demo.Model.BaseResponseModel;
 import com.nak.demo.Model.BaseResponseModelWithData;
+import com.nak.demo.exception.model.ResourceNotFoundException;
 import com.nak.demo.dto.stock.StockDto;
 import com.nak.demo.dto.stock.UpdateStockDto;
 import com.nak.demo.Service.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,4 +38,5 @@ public class StockController {
     public ResponseEntity<BaseResponseModel> deletedStocks(@PathVariable ("id") Long stockId){
         return stockService.deletedStock(stockId);
     }
+
 }
