@@ -15,9 +15,6 @@ public class RetestApplication {
     {
 		SpringApplication.run(RetestApplication.class, args);
 	}
-    @GetMapping("/api/v1/hello")
-    public String sayHello() {
-        return "Hello world from Spring Boot";
 
     }
-}
+
