@@ -6,6 +6,7 @@ import com.nak.demo.exception.model.ResourceNotFoundException;
 import com.nak.demo.dto.stock.StockDto;
 import com.nak.demo.dto.stock.UpdateStockDto;
 import com.nak.demo.Service.StockService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class StockController {
     private StockService stockService;
 
     @PostMapping()
-    public ResponseEntity<BaseResponseModel> createStock(@RequestBody StockDto payload){
+    public ResponseEntity<BaseResponseModel> createStock(@Valid @RequestBody StockDto payload){
         return stockService.createdStocks(payload);
     }
     @GetMapping()
@@ -31,7 +32,7 @@ public class StockController {
 
     }
     @PutMapping("/{id}")
-    public ResponseEntity<BaseResponseModel> updatedStocks(@PathVariable ("id") Long stockId,@RequestBody UpdateStockDto payload){
+    public ResponseEntity<BaseResponseModel> updatedStocks(  @PathVariable ("id") Long stockId, @Valid @RequestBody UpdateStockDto payload){
         return stockService.adjustQuantity(stockId,payload);
     }
     @DeleteMapping("/{id}")

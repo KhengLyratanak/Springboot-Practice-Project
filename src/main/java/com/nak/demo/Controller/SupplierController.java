@@ -5,6 +5,7 @@ import com.nak.demo.Model.BaseResponseModelWithData;
 import com.nak.demo.exception.model.ResourceNotFoundException;
 import com.nak.demo.Service.SupplierService;
 import com.nak.demo.dto.supplier.SupplierDto;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class SupplierController {
     }
 
     @PostMapping
-    public ResponseEntity<BaseResponseModel> createSupplier(@RequestBody SupplierDto payload) {
+    public ResponseEntity<BaseResponseModel> createSupplier(@Valid  @RequestBody SupplierDto payload) {
         return supplierService.createSupplier(payload);
     }
 
