@@ -44,8 +44,7 @@ public class UserService {
              throw new DuplicateException("user already existed");
         }
         if (userRepository.existsByEmail(payload.getEmail())){
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(new BaseResponseModel("fail","email is existed"));
+            throw new DuplicateException("email already existed");
         }
         User user = mapper.toEntity(payload);
 

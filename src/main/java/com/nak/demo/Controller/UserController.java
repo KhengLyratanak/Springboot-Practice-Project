@@ -5,6 +5,7 @@ import com.nak.demo.Model.BaseResponseModelWithData;
 import com.nak.demo.exception.model.ResourceNotFoundException;
 import com.nak.demo.dto.user.UserDto;
 import com.nak.demo.Service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ public class UserController {
         return userService.getUser(userId);
     }
     @PostMapping
-    public ResponseEntity<BaseResponseModel> createUser(@RequestBody UserDto payload) {
+    public ResponseEntity<BaseResponseModel> createUser(@Valid  @RequestBody UserDto payload) {
         return userService.createUser( payload);
     }
 
