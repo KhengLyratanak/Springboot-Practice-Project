@@ -24,10 +24,7 @@ public class ProductService {
     private ProductRepository productRepository;
     @Autowired
     private ProductMapper mapper;
-    
-    private List<ProductDto> products = new ArrayList<>(Arrays.asList(
-            new ProductDto(1L, "Coca Cola", 1.5D,"dd")
-    ));
+
     public ResponseEntity<BaseResponseModelWithData> listProduct(){
         List<Product> products = productRepository.findAll();
         List<ProductResponseDto> dtos = mapper.toDtoList(products);
