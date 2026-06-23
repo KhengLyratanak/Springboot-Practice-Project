@@ -12,7 +12,7 @@ public class UserDto {
     private String name;
 
     @NotEmpty(message = "password is required")
-    @Size(min = 5,max = 40,message = "address must be between 5 and 40 charecters")
+    @Size(min = 8,max = 20,message = "address must be between 5 and 40 charecters")
     private String password;
 
     @NotNull(message = "age is required")

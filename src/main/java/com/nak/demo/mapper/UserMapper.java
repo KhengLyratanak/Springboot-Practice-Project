@@ -55,4 +55,7 @@ public class UserMapper {
                 .map(user -> this.toDto(user))
                 .collect(Collectors.toList());
     }
+    public void updateEntityChangePassword(User entity,String password){
+        entity.setPassword(password);
+    }
 }

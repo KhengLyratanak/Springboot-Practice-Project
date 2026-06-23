@@ -2,6 +2,7 @@ package com.nak.demo.Controller;
 
 import com.nak.demo.Model.BaseResponseModel;
 import com.nak.demo.Model.BaseResponseModelWithData;
+import com.nak.demo.dto.user.ChangePasswordDto;
 import com.nak.demo.dto.user.UpdateUserDto;
 import com.nak.demo.exception.model.ResourceNotFoundException;
 import com.nak.demo.dto.user.UserDto;
@@ -41,6 +42,10 @@ public class UserController {
     @DeleteMapping("/{user_id}")
     public  ResponseEntity<BaseResponseModel> deleteUser(@PathVariable("user_id") Long userId){
       return userService.deleteUser(userId);
+    }
+    @PatchMapping("/{user_id}/change-password")
+    public ResponseEntity<BaseResponseModel> changePassword(@PathVariable ("user_id") Long userId,@RequestBody ChangePasswordDto dto){
+            return userService.changePassword(dto,userId);
     }
     @GetMapping("/search")
     public ResponseEntity<BaseResponseModelWithData> findUser(

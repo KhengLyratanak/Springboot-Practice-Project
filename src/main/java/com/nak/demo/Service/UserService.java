@@ -3,6 +3,7 @@ package com.nak.demo.Service;
 import com.nak.demo.Entity.User;
 import com.nak.demo.Model.BaseResponseModel;
 import com.nak.demo.Model.BaseResponseModelWithData;
+import com.nak.demo.dto.user.ChangePasswordDto;
 import com.nak.demo.dto.user.UpdateUserDto;
 import com.nak.demo.exception.model.DuplicateException;
 import com.nak.demo.exception.model.ResourceNotFoundException;
@@ -17,6 +18,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -88,4 +91,24 @@ public class UserService {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseModelWithData("success","successfully retrieved User", user));
     }
+    public ResponseEntity<BaseResponseModel> changePassword( ChangePasswordDto dto,Long userId){
+        User user = userRepository.findById(userId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("user not found with id :" +userId));
+
+        if (!Objects.equals(user.getPassword(),dto.getOldPassword())){
+                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT)
+                        .body(new BaseResponseModel("fail" , "old password is incorrect"));
+        }
+        if (!Objects.equals(dto.getNewPassword(),dto.getConfirmPassword())){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new BaseResponseModel("fail","new password and confirm password must be the same"));
+        }
+        mapper.updateEntityChangePassword(user,dto.getNewPassword());
+        userRepository.save(user);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponseModel("success","successfully changed password"));
+    }
+
 }
