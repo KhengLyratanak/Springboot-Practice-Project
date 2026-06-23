@@ -2,6 +2,7 @@ package com.nak.demo.Controller;
 
 import com.nak.demo.Model.BaseResponseModel;
 import com.nak.demo.Model.BaseResponseModelWithData;
+import com.nak.demo.dto.supplier.SupplierUpdateDto;
 import com.nak.demo.exception.model.ResourceNotFoundException;
 import com.nak.demo.Service.SupplierService;
 import com.nak.demo.dto.supplier.SupplierDto;
@@ -30,7 +31,7 @@ public class SupplierController {
     @PutMapping("{supplier_id}")
     public ResponseEntity<BaseResponseModel> updateSupplier(
             @PathVariable("supplier_id") Long supplierId,
-            @RequestBody SupplierDto payload
+            @RequestBody SupplierUpdateDto payload
     ) {
         return supplierService.updateSupplier(supplierId,payload);
     }

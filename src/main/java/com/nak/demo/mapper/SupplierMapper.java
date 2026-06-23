@@ -3,6 +3,7 @@ package com.nak.demo.mapper;
 import com.nak.demo.Entity.Supplier;
 import com.nak.demo.dto.supplier.SupplierDto;
 import com.nak.demo.dto.supplier.SupplierResponseDto;
+import com.nak.demo.dto.supplier.SupplierUpdateDto;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -29,8 +30,8 @@ public class SupplierMapper {
         dto.setId(entity.getId());
         dto.setSupplierName(entity.getName());
         dto.setAddress(entity.getAddress());
-        dto.setPhone(entity.getPhone());
         dto.setEmail(entity.getEmail());
+        dto.setPhone(entity.getPhone());
         dto.setRating(entity.getRating());
         dto.setCreatedAt(entity.getCreatedAt());
         dto.setUpdatedAt(entity.getUpdatedAt());
@@ -49,7 +50,7 @@ public class SupplierMapper {
                 .collect(Collectors.toList());
     }
 
-    public void updateEntityFromDto(Supplier entity, SupplierDto dto) {
+    public void updateEntityFromDto(Supplier entity, SupplierUpdateDto dto) {
         if(entity == null || dto == null) {
             return;
         }

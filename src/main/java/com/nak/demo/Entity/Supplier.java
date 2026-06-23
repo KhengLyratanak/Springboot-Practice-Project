@@ -17,7 +17,7 @@ public class Supplier {
     private String address;
     private String email;
     private String rating;
-    private Long phone;
+    private String phone;
     @Column(name = "created_at")
     private LocalDateTime createdAt;
     @Column(name = "updated_at")

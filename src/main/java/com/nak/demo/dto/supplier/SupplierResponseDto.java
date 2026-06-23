@@ -21,7 +21,7 @@ public class SupplierResponseDto {
     private String rating;
 
     @JsonProperty("contact_number")
-    private Long phone;
+    private String phone;
 
     private String email;
 

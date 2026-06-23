@@ -2,6 +2,7 @@ package com.nak.demo.Service;
 
 import com.nak.demo.Model.BaseResponseModel;
 import com.nak.demo.Model.BaseResponseModelWithData;
+import com.nak.demo.dto.supplier.SupplierUpdateDto;
 import com.nak.demo.exception.model.DuplicateException;
 import com.nak.demo.exception.model.ResourceNotFoundException;
 import com.nak.demo.Repository.SupplierRepository;
@@ -51,7 +52,7 @@ public class SupplierService {
                 .body(new BaseResponseModel("success","successfully created supplier"));
     }
 
-    public ResponseEntity<BaseResponseModel> updateSupplier(Long supplierId, SupplierDto dto) {
+    public ResponseEntity<BaseResponseModel> updateSupplier(Long supplierId, SupplierUpdateDto dto) {
         Supplier existingSupplier = supplierRepository.findById(supplierId)
 
         // if supplier not found, return 404
