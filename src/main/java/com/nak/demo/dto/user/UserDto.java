@@ -7,7 +7,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDto {
-    private  Long id;
     @NotNull(message = "user name is required")
     @Size(min = 4,max = 30,message = "username must be between 4 and 30 charecters")
     private String name;

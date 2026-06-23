@@ -3,6 +3,7 @@ package com.nak.demo.Service;
 import com.nak.demo.Entity.User;
 import com.nak.demo.Model.BaseResponseModel;
 import com.nak.demo.Model.BaseResponseModelWithData;
+import com.nak.demo.dto.user.UpdateUserDto;
 import com.nak.demo.exception.model.DuplicateException;
 import com.nak.demo.exception.model.ResourceNotFoundException;
 import com.nak.demo.dto.user.UserDto;
@@ -37,7 +38,7 @@ public class UserService {
                         new ResourceNotFoundException("user not found with id :"  +userId));
 
             return ResponseEntity.status(HttpStatus.OK)
-                    .body(new BaseResponseModelWithData("success","user found : ",userId));
+                    .body(new BaseResponseModelWithData("success","user found : ",user));
     }
     public ResponseEntity<BaseResponseModel> createUser(UserDto payload){
         if(userRepository.existsByName(payload.getName())){
@@ -54,7 +55,7 @@ public class UserService {
                 .status(HttpStatus.CREATED)
                 .body(new BaseResponseModel("success","successfully created user"));
     }
-    public ResponseEntity<BaseResponseModel> updateUser(UserDto payload, Long userId){
+    public ResponseEntity<BaseResponseModel> updateUser(UpdateUserDto payload, Long userId){
        User existing = userRepository.findById(userId)
 //IF USER NOT FOUND then response 404
         .orElseThrow(() ->

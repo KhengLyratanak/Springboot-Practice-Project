@@ -1,6 +1,7 @@
 package com.nak.demo.mapper;
 
 import com.nak.demo.Entity.User;
+import com.nak.demo.dto.user.UpdateUserDto;
 import com.nak.demo.dto.user.UserDto;
 import com.nak.demo.dto.user.UserResponseDto;
 import org.springframework.stereotype.Component;
@@ -24,13 +25,11 @@ public class UserMapper {
         entity.setCreatedAt(LocalDateTime.now());
         return entity;
     }
-    public void updateEntityFromDto(User entity, UserDto dto){
+    public void updateEntityFromDto(User entity, UpdateUserDto dto){
         if (entity == null || dto == null){
             return;
         }
         entity.setName(dto.getName());
-        entity.setEmail(dto.getEmail());
-        entity.setPassword(dto.getPassword());
         entity.setRole(dto.getRole());
         entity.setAddress(dto.getAddress());
     }

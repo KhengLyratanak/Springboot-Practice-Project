@@ -2,6 +2,7 @@ package com.nak.demo.Controller;
 
 import com.nak.demo.Model.BaseResponseModel;
 import com.nak.demo.Model.BaseResponseModelWithData;
+import com.nak.demo.dto.user.UpdateUserDto;
 import com.nak.demo.exception.model.ResourceNotFoundException;
 import com.nak.demo.dto.user.UserDto;
 import com.nak.demo.Service.UserService;
@@ -33,7 +34,7 @@ public class UserController {
 
     @PutMapping("/{user_id}")
     public ResponseEntity<BaseResponseModel> updateUser(@PathVariable("user_id") Long userId,
-                                                       @Valid @RequestBody UserDto payload) {
+                                                       @Valid @RequestBody UpdateUserDto payload) {
         return userService.updateUser( payload,userId);
     }
 
