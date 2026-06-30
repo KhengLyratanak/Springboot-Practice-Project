@@ -95,10 +95,10 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("user not found with id :" +userId));
-
+        //if current password not the same with oldpassword
         if (!Objects.equals(user.getPassword(),dto.getOldPassword())){
                 return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT)
-                        .body(new BaseResponseModel("fail" , "old password is incorrect"));
+                        .body(new BaseResponseModel("fail" , "old password is incorrect,please return the correct password"));
         }
         if (!Objects.equals(dto.getNewPassword(),dto.getConfirmPassword())){
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
