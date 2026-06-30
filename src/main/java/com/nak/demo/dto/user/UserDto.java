@@ -1,5 +1,7 @@
 package com.nak.demo.dto.user;
 
+import com.nak.demo.common.annotation.ValidEnum;
+import com.nak.demo.common.enums.role;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
@@ -26,5 +28,7 @@ public class UserDto {
     @NotNull(message = "email is required")
     @Email(message = "email must be valid")
     private  String email;
-    private String role= "USER";
+    @NotNull(message = "role is required")
+    @ValidEnum(enumClass = role.class,message = "Role must be in [USER,ADMIN]")
+    private String role;
 }
