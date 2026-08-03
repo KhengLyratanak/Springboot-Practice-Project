@@ -28,6 +28,7 @@ public class OrderMapper {
                 })
                 .toList();
         entity.setItems(orderItemEntities);
+
         return entity;
     }
 
@@ -37,8 +38,8 @@ public class OrderMapper {
         }
         OrderResponseDto dto = new OrderResponseDto();
         dto.setId(entity.getId());
-        dto.setCreatedAt(dto.getCreatedAt());
-        dto.setUpdatedAt(dto.getUpdatedAt());
+        dto.setCreatedAt(entity.getCreatedAt());
+        dto.setUpdatedAt(entity.getUpdatedAt());
         dto.setStatus(entity.getStatus());
 
         if (entity.getItems() != null && !entity.getItems().isEmpty()) {
