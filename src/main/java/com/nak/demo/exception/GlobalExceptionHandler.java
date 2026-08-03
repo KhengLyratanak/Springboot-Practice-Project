@@ -4,6 +4,7 @@ import com.nak.demo.Model.BaseResponseModel;
 import com.nak.demo.Model.BaseResponseModelWithData;
 import com.nak.demo.exception.model.DuplicateException;
 import com.nak.demo.exception.model.ResourceNotFoundException;
+import com.nak.demo.exception.model.UnprocessableEntityException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -45,6 +46,11 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new BaseResponseModelWithData("fail","validation failed",errors));
+    }
+    @ExceptionHandler(UnprocessableEntityException.class)
+    public ResponseEntity<BaseResponseModel> handleUnprocessableEntity(UnprocessableEntityException ex){
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                .body(new BaseResponseModel("fail",ex.getMessage()));
     }
 }
 

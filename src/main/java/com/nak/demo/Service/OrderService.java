@@ -11,6 +11,7 @@ import com.nak.demo.dto.order.OrderCreateDto;
 import com.nak.demo.dto.order.OrderItemDto;
 import com.nak.demo.dto.order.OrderUpdateDto;
 import com.nak.demo.exception.model.ResourceNotFoundException;
+import com.nak.demo.exception.model.UnprocessableEntityException;
 import com.nak.demo.mapper.OrderMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,7 +82,7 @@ public class OrderService {
                 }
             }
             if (remain>0) {
-                throw new RuntimeException("Not enough stock for product id : " +productId);
+                throw new UnprocessableEntityException("Not enough stock for product id : " +productId);
             }
         }
         stockRepository.saveAll(stocks);
