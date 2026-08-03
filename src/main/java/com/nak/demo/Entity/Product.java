@@ -1,18 +1,18 @@
 package com.nak.demo.Entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import lombok.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @Table(name = "products")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString(exclude = {"stock"})
+@EqualsAndHashCode(exclude = {"stocks"})
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
