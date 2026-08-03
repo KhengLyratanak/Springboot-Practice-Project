@@ -12,7 +12,7 @@ public class OrderItemResponseDto {
     private String productName;
 
     @JsonProperty("purchase_amount")
-    private Integer purchaseAmount;
+    private Long purchaseAmount;
 
     @JsonProperty("unit_price")
     private Double unitPrice;

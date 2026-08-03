@@ -1,12 +1,17 @@
 package com.nak.demo.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 @Entity
 @Table(name = "order_items")
-@Data
-
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString(exclude = {"order"})
+@EqualsAndHashCode(exclude = {"order"})
 public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,5 +25,6 @@ public class OrderItem {
 
     @ManyToOne
     @JoinColumn(name = "order_id",nullable = false)
+    @JsonIgnore
     private  Order order;
 }
