@@ -42,7 +42,7 @@ public class StockService {
                        new ResourceNotFoundException("stock not found with id :" +stockId));
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new BaseResponseModelWithData("success","successfully retrieved stock  ",stockId));
+                .body(new BaseResponseModelWithData("success","successfully retrieved stock  ",mapper.toDto(stock)));
 
     }
 
