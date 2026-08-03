@@ -1,13 +1,14 @@
 package com.nak.demo.dto.order;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-
+@JsonPropertyOrder({"items","status","total","id","created_at","updated_at"})
 public class OrderResponseDto {
     @JsonProperty("order_id")
     private Long id ;
