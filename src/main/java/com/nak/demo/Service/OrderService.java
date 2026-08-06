@@ -31,8 +31,10 @@ public class OrderService {
 
     @Autowired
     private StockRepository stockRepository;
+
     @Autowired
     private StockManagementService stockManagementService;
+
     public List<OrderResponseDto> listsOrder(){
         List<Order> orders = orderRepository.findAll();
        return orderMapper.toResponseDtoList(orders);
