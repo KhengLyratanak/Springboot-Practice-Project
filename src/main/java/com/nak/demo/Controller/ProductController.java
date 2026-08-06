@@ -2,6 +2,8 @@ package com.nak.demo.Controller;
 
 import com.nak.demo.Model.BaseResponseModel;
 import com.nak.demo.Model.BaseResponseModelWithData;
+import com.nak.demo.dto.base.Response;
+import com.nak.demo.dto.product.ProductResponseDto;
 import com.nak.demo.exception.model.DuplicateException;
 import com.nak.demo.exception.model.ResourceNotFoundException;
 import com.nak.demo.dto.product.ProductDto;
@@ -12,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/products")
 public class ProductController {
@@ -19,27 +23,36 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping()
-    public ResponseEntity<BaseResponseModelWithData> listProduct() {
-        return productService.listProduct();
+    public ResponseEntity<Response> listProduct() {
+        List<ProductResponseDto> dtos = productService.listProduct();
+         return ResponseEntity.status(HttpStatus.OK)
+                 .body(Response.success("200","success","successfully retrieved product",dtos ));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BaseResponseModelWithData> getProduct(@PathVariable("id") Long productId) {
-        return productService.getProduct(productId);
+    public ResponseEntity<Response> getProduct(@PathVariable("id") Long productId) {
+        ProductResponseDto product = productService.getProduct(productId);
+         return ResponseEntity.status(HttpStatus.OK)
+                 .body(Response.success("200","success","successfully product founded",product));
     }
 
     @GetMapping("/search")
-    public ResponseEntity<BaseResponseModelWithData> seaerchProducts(
+    public ResponseEntity<Response> seaerchProducts(
             @RequestParam(value = "name", required = false) String name,
             @RequestParam(value = "minPrice", required = false) Double minPrice,
             @RequestParam(value = "maxPrice", required = false) Double maxPrice
     ) {
-        return productService.searchProduct(name, minPrice, maxPrice);
+            List<ProductResponseDto> products = productService.searchProduct
+                    (name,minPrice,maxPrice);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(Response.success("200","success","successfully retrieved products with filter",products));
     }
 
     @PostMapping()
-    public ResponseEntity<BaseResponseModel> createProduct( @Valid @RequestBody ProductDto payload) {
-        return productService.createProduct(payload);
+    public ResponseEntity<Response> createProduct( @Valid @RequestBody ProductDto payload) {
+         productService.createProduct(payload);
+         return ResponseEntity.status(HttpStatus.CREATED)
+                 .body(Response.success("201","success","successfully created product"));
     }
 
     @PutMapping("/{id}")
@@ -48,7 +61,9 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<BaseResponseModel> deleteProduct(@PathVariable("id") Long productId) {
-        return productService.deleteProduct(productId);
+    public ResponseEntity<Response> deleteProduct(@PathVariable("id") Long productId) {
+         productService.deleteProduct(productId);
+         return ResponseEntity.status(HttpStatus.OK)
+                 .body(Response.success("200","success","successfully deleted product"));
     }
 }
