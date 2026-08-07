@@ -2,6 +2,8 @@ package com.nak.demo.Controller;
 
 import com.nak.demo.Model.BaseResponseModel;
 import com.nak.demo.Model.BaseResponseModelWithData;
+import com.nak.demo.dto.base.Response;
+import com.nak.demo.dto.stock.StockResponseDto;
 import com.nak.demo.exception.model.ResourceNotFoundException;
 import com.nak.demo.dto.stock.StockDto;
 import com.nak.demo.dto.stock.UpdateStockDto;
@@ -12,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/stocks")
 public class StockController {
@@ -19,25 +23,37 @@ public class StockController {
     private StockService stockService;
 
     @PostMapping()
-    public ResponseEntity<BaseResponseModel> createStock(@Valid @RequestBody StockDto payload){
-        return stockService.createdStocks(payload);
+    public ResponseEntity<Response> createStock(@Valid @RequestBody StockDto payload){
+         stockService.createdStocks(payload);
+         return ResponseEntity.status(HttpStatus.CREATED)
+                 .body(Response.success("201","successsss","successfully created stock"));
     }
     @GetMapping()
-    public ResponseEntity<BaseResponseModelWithData > listStocks(){
-        return stockService.listStocks();
-    }
-    @GetMapping("/{id}")
-    public ResponseEntity<BaseResponseModelWithData> getStock(@PathVariable ("id") Long stockId){
-        return stockService.getStock(stockId);
+    public ResponseEntity<Response > listStocks(){
 
+        List<StockResponseDto> stocks =  stockService.listStocks();
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(Response.success("200","success","successfully retrieved ",stocks));
     }
-    @PutMapping("/{id}")
-    public ResponseEntity<BaseResponseModel> updatedStocks(  @PathVariable ("id") Long stockId, @Valid @RequestBody UpdateStockDto payload){
-        return stockService.adjustQuantity(stockId,payload);
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Response> getStock(@PathVariable ("id") Long stockId){
+       StockResponseDto stocks =  stockService.getStock(stockId);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(Response.success("200","success","successfully retrived stock",stocks));
+    }
+    @PatchMapping ("/{id}")
+    public ResponseEntity<Response> updatedStocks(  @PathVariable ("id") Long stockId, @Valid @RequestBody UpdateStockDto payload){
+         stockService.adjustQuantity(stockId,payload);
+         return ResponseEntity.status(HttpStatus.OK)
+                 .body(Response.success("200","success","successfully updated stock"));
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<BaseResponseModel> deletedStocks(@PathVariable ("id") Long stockId){
-        return stockService.deletedStock(stockId);
+    public ResponseEntity<Response> deletedStocks(@PathVariable ("id") Long stockId){
+         stockService.deletedStock(stockId);
+         return ResponseEntity.status(HttpStatus.OK)
+                 .body(Response.success("209","success","successfully deleted stock"));
     }
 
 }

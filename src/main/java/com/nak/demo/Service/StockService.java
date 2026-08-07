@@ -10,6 +10,7 @@ import com.nak.demo.dto.stock.StockDto;
 import com.nak.demo.dto.stock.UpdateStockDto;
 import com.nak.demo.Repository.StockRepository;
 import com.nak.demo.dto.stock.StockResponseDto;
+import com.nak.demo.exception.model.UnprocessableEntityException;
 import com.nak.demo.mapper.StockMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,37 +30,31 @@ public class StockService {
     @Autowired
     private ProductRepository productRepository;
 
-    public ResponseEntity<BaseResponseModelWithData> listStocks() {
+    public List<StockResponseDto> listStocks() {
         List<Stock> stocks = stockRepository.findAll();
         List<StockResponseDto> dtos = mapper.toDtoList(stocks);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(new BaseResponseModelWithData("success", "successfully retrieved stocks", dtos));
 
+        return mapper.toDtoList(stocks);
     }
-    public ResponseEntity<BaseResponseModelWithData> getStock(Long stockId){
+    public StockResponseDto getStock(Long stockId) {
         Stock stock = stockRepository.findById(stockId)
                 .orElseThrow(() ->
-                       new ResourceNotFoundException("stock not found with id :" +stockId));
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(new BaseResponseModelWithData("success","successfully retrieved stock  ",mapper.toDto(stock)));
-
+                        new ResourceNotFoundException("stock not found with id :" + stockId));
+        return mapper.toDto(stock);
     }
 
 
-    public ResponseEntity<BaseResponseModel> createdStocks(StockDto stock) {
+    public void  createdStocks(StockDto stock) {
         Product existingProduct = productRepository.findById(stock.getProductId())
-       //product not found
+                //product not found
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("product not found with id:" +stock.getProductId()));
+                        new ResourceNotFoundException("product not found with id:" + stock.getProductId()));
 
-       Stock stockEntity = mapper.toEntity(stock,existingProduct);
+        Stock stockEntity = mapper.toEntity(stock, existingProduct);
         stockRepository.save(stockEntity);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new BaseResponseModel("success", "successfully created stock"));
     }
 
-    public ResponseEntity<BaseResponseModel> adjustQuantity(Long stockId, UpdateStockDto updateStock) {
+    public void adjustQuantity(Long stockId, UpdateStockDto updateStock) {
         Stock existingStock = stockRepository.findById(stockId)
 
         // stock not found in DB
@@ -75,29 +70,22 @@ public class StockService {
         } else if(updateStock.getOperationType() == 2) { // remove
             //  when remove amount > existing amount
             if(existingStock.getQuantity() < updateStock.getQuantity()) {
-                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
-                        .body(new BaseResponseModel("fail","quantity to remove can not be exceeded than existing stock: " + existingStock.getQuantity()));
+                throw new UnprocessableEntityException("quantity to remove can not be exceeded than existing stock:" + existingStock.getQuantity());
             }
-
             Long newQty = existingStock.getQuantity() - updateStock.getQuantity();
 
             existingStock.setQuantity(newQty);
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new BaseResponseModel("fail","invalid operation type"));
+            throw new ResourceNotFoundException("Invalid operation type");
         }
 
         stockRepository.save(existingStock);
 
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(new BaseResponseModel("success","successfully adjusted stock quantity"));
     }
-        public ResponseEntity<BaseResponseModel> deletedStock(Long stockId){
-            if(!stockRepository.existsById(stockId)){
-                throw new ResourceNotFoundException("stock not found with id : "+stockId);
+        public void deletedStock(Long stockId) {
+            if (!stockRepository.existsById(stockId)) {
+                throw new ResourceNotFoundException("stock not found with id : " + stockId);
             }
             stockRepository.deleteById(stockId);
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(new BaseResponseModel("success","successfully deleted stock"));
         }
 }
