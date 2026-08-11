@@ -1,5 +1,6 @@
 package com.nak.demo.common.logging;
 
+import com.nak.demo.common.constant.LoggingConstant;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -8,8 +9,7 @@ public class LogFormatter {
 
     public String logRequest(String requestId,String target,String method,Long startTime){
         return String.format(
-                LOG_FORMAT,
-                "REQUEST",
+                LoggingConstant.REQUEST,
                 requestId,
                 target,
                 method,
@@ -21,7 +21,7 @@ public class LogFormatter {
     public String logResponse(String requestId,String target,String method,Long startTime,Long endTime){
       return String.format(
         LOG_FORMAT,
-                "RESPONSE",
+              LoggingConstant.REQUEST,
                 requestId,
                 target,
                 method,
@@ -33,7 +33,7 @@ public class LogFormatter {
 
     public String logError(String requestId,String target,String method,Long startTime,Long endTime){
         return String.format(
-                LOG_FORMAT,
+              LoggingConstant.ERROR,
                 requestId,
                 "ERROR",
                 target,
