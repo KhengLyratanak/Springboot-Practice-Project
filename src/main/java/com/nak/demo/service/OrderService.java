@@ -1,25 +1,18 @@
-package com.nak.demo.Service;
+package com.nak.demo.service;
 
-import com.nak.demo.Entity.Order;
-import com.nak.demo.Model.BaseResponseModel;
-import com.nak.demo.Model.BaseResponseModelWithData;
-import com.nak.demo.Repository.OrderRepository;
-import com.nak.demo.Repository.StockRepository;
+import com.nak.demo.entity.Order;
+import com.nak.demo.repository.OrderRepository;
+import com.nak.demo.repository.StockRepository;
 import com.nak.demo.dto.order.OrderCreateDto;
-import com.nak.demo.dto.order.OrderItemDto;
 import com.nak.demo.dto.order.OrderResponseDto;
 import com.nak.demo.dto.order.OrderUpdateDto;
 import com.nak.demo.exception.model.ResourceNotFoundException;
 import com.nak.demo.mapper.OrderMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class OrderService {

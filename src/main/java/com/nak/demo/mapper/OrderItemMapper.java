@@ -1,11 +1,10 @@
 package com.nak.demo.mapper;
 
-import com.nak.demo.Entity.OrderItem;
-import com.nak.demo.Entity.Product;
-import com.nak.demo.Repository.ProductRepository;
+import com.nak.demo.entity.OrderItem;
+import com.nak.demo.entity.Product;
+import com.nak.demo.repository.ProductRepository;
 import com.nak.demo.dto.order.OrderItemDto;
 import com.nak.demo.dto.order.OrderItemResponseDto;
-import com.nak.demo.dto.order.OrderResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

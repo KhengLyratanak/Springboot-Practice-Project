@@ -1,6 +1,6 @@
 package com.nak.demo.mapper;
 
-import com.nak.demo.Entity.User;
+import com.nak.demo.entity.User;
 import com.nak.demo.dto.user.UpdateUserDto;
 import com.nak.demo.dto.user.UserDto;
 import com.nak.demo.dto.user.UserResponseDto;

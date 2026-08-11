@@ -1,17 +1,13 @@
-package com.nak.demo.Controller;
+package com.nak.demo.controller;
 
-import com.nak.demo.Model.BaseResponseModel;
-import com.nak.demo.Model.BaseResponseModelWithData;
-import com.nak.demo.Service.OrderService;
+import com.nak.demo.service.OrderService;
 import com.nak.demo.dto.base.Response;
 import com.nak.demo.dto.order.OrderCreateDto;
 import com.nak.demo.dto.order.OrderResponseDto;
 import com.nak.demo.dto.order.OrderUpdateDto;
 import jakarta.validation.Valid;
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

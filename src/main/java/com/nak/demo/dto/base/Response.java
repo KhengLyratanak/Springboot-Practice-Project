@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 import lombok.Getter;
-import org.apache.logging.log4j.message.StringFormattedMessage;
 @JsonPropertyOrder(value = {"code","message","description","data","timestamp"})
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data

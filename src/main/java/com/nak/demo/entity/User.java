@@ -1,4 +1,4 @@
-package com.nak.demo.Entity;
+package com.nak.demo.entity;
 
 
 import jakarta.persistence.*;

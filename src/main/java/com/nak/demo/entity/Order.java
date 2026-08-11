@@ -1,9 +1,8 @@
-package com.nak.demo.Entity;
+package com.nak.demo.entity;
 
 import com.nak.demo.common.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.Data;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 import java.util.List;

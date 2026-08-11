@@ -1,7 +1,6 @@
-package com.nak.demo.Repository;
+package com.nak.demo.repository;
 
-import com.nak.demo.Entity.Stock;
-import org.hibernate.boot.models.JpaAnnotations;
+import com.nak.demo.entity.Stock;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

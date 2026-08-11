@@ -1,13 +1,9 @@
-package com.nak.demo.Controller;
+package com.nak.demo.controller;
 
-import com.nak.demo.Model.BaseResponseModel;
-import com.nak.demo.Model.BaseResponseModelWithData;
 import com.nak.demo.dto.base.Response;
 import com.nak.demo.dto.product.ProductResponseDto;
-import com.nak.demo.exception.model.DuplicateException;
-import com.nak.demo.exception.model.ResourceNotFoundException;
 import com.nak.demo.dto.product.ProductDto;
-import com.nak.demo.Service.ProductService;
+import com.nak.demo.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -56,8 +52,10 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BaseResponseModel> updateProduct(@PathVariable("id") Long productId, @RequestBody ProductDto payload) {
-        return productService.updateProduct(productId, payload);
+    public ResponseEntity<Response> updateProduct(@PathVariable("id") Long productId, @RequestBody ProductDto payload) {
+         productService.updateProduct(productId, payload);
+         return ResponseEntity.status(HttpStatus.OK)
+                 .body(Response.success("209","success","successfully updated product id:",productId));
     }
 
     @DeleteMapping("/{id}")

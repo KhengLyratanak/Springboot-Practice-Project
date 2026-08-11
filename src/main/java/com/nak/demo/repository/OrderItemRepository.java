@@ -1,6 +1,6 @@
-package com.nak.demo.Repository;
+package com.nak.demo.repository;
 
-import com.nak.demo.Entity.OrderItem;
+import com.nak.demo.entity.OrderItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,24 +1,19 @@
-package com.nak.demo.Service;
+package com.nak.demo.service;
 
-import com.nak.demo.Entity.Product;
-import com.nak.demo.Entity.Stock;
-import com.nak.demo.Model.BaseResponseModel;
-import com.nak.demo.Model.BaseResponseModelWithData;
+import com.nak.demo.entity.Product;
+import com.nak.demo.entity.Stock;
 import com.nak.demo.exception.model.ResourceNotFoundException;
-import com.nak.demo.Repository.ProductRepository;
+import com.nak.demo.repository.ProductRepository;
 import com.nak.demo.dto.stock.StockDto;
 import com.nak.demo.dto.stock.UpdateStockDto;
-import com.nak.demo.Repository.StockRepository;
+import com.nak.demo.repository.StockRepository;
 import com.nak.demo.dto.stock.StockResponseDto;
 import com.nak.demo.exception.model.UnprocessableEntityException;
 import com.nak.demo.mapper.StockMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class StockService {

@@ -1,6 +1,6 @@
-package com.nak.demo.Repository;
+package com.nak.demo.repository;
 
-import com.nak.demo.Entity.Product;
+import com.nak.demo.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

@@ -1,13 +1,10 @@
-package com.nak.demo.Controller;
+package com.nak.demo.controller;
 
-import com.nak.demo.Model.BaseResponseModel;
-import com.nak.demo.Model.BaseResponseModelWithData;
 import com.nak.demo.dto.base.Response;
 import com.nak.demo.dto.stock.StockResponseDto;
-import com.nak.demo.exception.model.ResourceNotFoundException;
 import com.nak.demo.dto.stock.StockDto;
 import com.nak.demo.dto.stock.UpdateStockDto;
-import com.nak.demo.Service.StockService;
+import com.nak.demo.service.StockService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

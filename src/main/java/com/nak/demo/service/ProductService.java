@@ -1,21 +1,15 @@
-package com.nak.demo.Service;
+package com.nak.demo.service;
 
-import com.nak.demo.Entity.Product;
-import com.nak.demo.Model.BaseResponseModel;
-import com.nak.demo.dto.base.Response;
+import com.nak.demo.entity.Product;
 import com.nak.demo.exception.model.DuplicateException;
 import com.nak.demo.exception.model.ResourceNotFoundException;
 import com.nak.demo.dto.product.ProductDto;
-import com.nak.demo.Repository.ProductRepository;
+import com.nak.demo.repository.ProductRepository;
 import com.nak.demo.dto.product.ProductResponseDto;
 import com.nak.demo.mapper.ProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -50,7 +44,7 @@ public class ProductService {
         productRepository.save(productEntity);
 
     }
-    public ResponseEntity<BaseResponseModel> updateProduct(Long productId, ProductDto payload) {
+    public void updateProduct(Long productId, ProductDto payload) {
         Product existing = productRepository.findById(productId)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("product not found with id :"  +productId));
@@ -58,8 +52,7 @@ public class ProductService {
         mapper.updateEntityFrom(existing,payload);
 
         productRepository.save(existing);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(new BaseResponseModel("Success", "Successfully updated Product"));
+
     }
     public void deleteProduct(Long productId) {
         if (!productRepository.existsById(productId)) {

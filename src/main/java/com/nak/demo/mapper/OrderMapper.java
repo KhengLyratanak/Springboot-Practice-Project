@@ -1,13 +1,11 @@
 package com.nak.demo.mapper;
 
-import com.nak.demo.Entity.Order;
-import com.nak.demo.Entity.OrderItem;
+import com.nak.demo.entity.Order;
+import com.nak.demo.entity.OrderItem;
 import com.nak.demo.dto.order.*;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Component

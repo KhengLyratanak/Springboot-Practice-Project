@@ -1,6 +1,6 @@
 package com.nak.demo.mapper;
 
-import com.nak.demo.Entity.Product;
+import com.nak.demo.entity.Product;
 import com.nak.demo.dto.product.ProductDto;
 import com.nak.demo.dto.product.ProductResponseDto;
 import org.springframework.stereotype.Component;

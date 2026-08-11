@@ -1,6 +1,6 @@
 package com.nak.demo.mapper;
 
-import com.nak.demo.Entity.Supplier;
+import com.nak.demo.entity.Supplier;
 import com.nak.demo.dto.supplier.SupplierDto;
 import com.nak.demo.dto.supplier.SupplierResponseDto;
 import com.nak.demo.dto.supplier.SupplierUpdateDto;

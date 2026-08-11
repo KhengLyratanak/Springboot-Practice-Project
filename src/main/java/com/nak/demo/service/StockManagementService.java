@@ -1,7 +1,7 @@
-package com.nak.demo.Service;
+package com.nak.demo.service;
 
-import com.nak.demo.Entity.Stock;
-import com.nak.demo.Repository.StockRepository;
+import com.nak.demo.entity.Stock;
+import com.nak.demo.repository.StockRepository;
 import com.nak.demo.dto.order.OrderItemDto;
 import com.nak.demo.exception.model.UnprocessableEntityException;
 import org.springframework.beans.factory.annotation.Autowired;
