@@ -55,7 +55,7 @@ public class ProductController {
     public ResponseEntity<Response> updateProduct(@PathVariable("id") Long productId, @RequestBody ProductDto payload) {
          productService.updateProduct(productId, payload);
          return ResponseEntity.status(HttpStatus.OK)
-                 .body(Response.success("209","success","successfully updated product id:",productId));
+                 .body(Response.success("200","success","successfully updated product id:",productId));
     }
 
     @DeleteMapping("/{id}")
