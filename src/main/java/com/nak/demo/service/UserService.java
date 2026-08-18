@@ -3,26 +3,32 @@ package com.nak.demo.service;
 import com.nak.demo.entity.User;
 import com.nak.demo.dto.user.ChangePasswordDto;
 import com.nak.demo.dto.user.UpdateUserDto;
-import com.nak.demo.exception.model.DuplicateException;
 import com.nak.demo.exception.model.ResourceNotFoundException;
-import com.nak.demo.dto.user.UserDto;
 import com.nak.demo.repository.UserRepository;
 
 import com.nak.demo.dto.user.UserResponseDto;
 import com.nak.demo.mapper.UserMapper;
+import com.nak.demo.service.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private UserMapper mapper;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     public List<UserResponseDto> listUser(){
         List<User> users = userRepository.findAll();
@@ -34,18 +40,9 @@ public class UserService {
                 .orElseThrow(() ->
                         new ResourceNotFoundException("user not found with id :"  +userId));
 
+        String token = jwtUtil.generateToken(user);
+        System.out.println("Token: " +token);
             return mapper.toDto(user);
-    }
-    public void createUser(UserDto payload){
-        if(userRepository.existsByName(payload.getName())){
-             throw new DuplicateException("user already existed");
-        }
-        if (userRepository.existsByEmail(payload.getEmail())){
-            throw new DuplicateException("email already existed");
-        }
-        User user = mapper.toEntity(payload);
-
-        userRepository.save(user);
 
     }
     public void updateUser(UpdateUserDto payload, Long userId){
@@ -91,6 +88,13 @@ public class UserService {
         mapper.updateEntityChangePassword(user, dto.getNewPassword());
         userRepository.save(user);
 
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByName(username)
+                .orElseThrow( () ->{ throw new UsernameNotFoundException("user not found" +username);
+                });
     }
 
 }
