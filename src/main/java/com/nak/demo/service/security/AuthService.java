@@ -1,12 +1,18 @@
 package com.nak.demo.service.security;
 
 
+import com.nak.demo.dto.auth.AuthDto;
+import com.nak.demo.dto.auth.AuthResponseDto;
 import com.nak.demo.dto.user.UserDto;
 import com.nak.demo.entity.User;
 import com.nak.demo.exception.model.DuplicateException;
 import com.nak.demo.mapper.UserMapper;
 import com.nak.demo.repository.UserRepository;
+import com.nak.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +31,13 @@ public class AuthService {
     @Autowired
     private JwtUtil jwtUtil;
 
-    public String register(UserDto payload){
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    public AuthResponseDto register(UserDto payload){
 
         if(userRepository.existsByName(payload.getName())){
             throw new DuplicateException("user already existed");
@@ -38,7 +50,17 @@ public class AuthService {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
 
      User createdUser = userRepository.save(user);
-     String token = jwtUtil.generateToken(createdUser);
-     return token;
+     String accessToken = jwtUtil.generateToken(createdUser);
+
+     return new AuthResponseDto(accessToken,null);
+    }
+    public AuthResponseDto login(AuthDto payload){
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(payload.getUsername(),payload.getPassword())
+        );
+        UserDetails userDetails = userService.loadUserByUsername(payload.getUsername());
+        String accessToken = jwtUtil.generateToken(userDetails);
+
+        return new AuthResponseDto(accessToken,null);
     }
 }

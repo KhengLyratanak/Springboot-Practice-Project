@@ -1,5 +1,7 @@
 package com.nak.demo.controller;
 
+import com.nak.demo.dto.auth.AuthDto;
+import com.nak.demo.dto.auth.AuthResponseDto;
 import com.nak.demo.dto.base.Response;
 import com.nak.demo.dto.user.UserDto;
 import com.nak.demo.service.security.AuthService;
@@ -20,9 +22,16 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<Response> register(@Valid @RequestBody UserDto payload){
-        String token = authService.register(payload);
+        AuthResponseDto dto = authService.register(payload);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(Response.success("201","success",token));
+                .body(Response.success("201","success","successfully registed user",dto));
+    }
+    @PostMapping("/login")
+    public ResponseEntity<Response> login(@RequestBody AuthDto payload){
+        AuthResponseDto dto = authService.login(payload);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(Response.success("200","success","successfully login",dto));
     }
 }
