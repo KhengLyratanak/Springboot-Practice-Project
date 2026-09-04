@@ -23,7 +23,7 @@ public class LogFormatter {
     public String logResponse(String requestId,String target,String method,Long startTime,Long endTime,String httpMethod,String requestPath){
       return String.format(
         LOG_FORMAT,
-              LoggingConstant.REQUEST,
+              LoggingConstant.RESPONSE,
                 requestId,
                 target,
                 method,
