@@ -6,6 +6,7 @@ import com.nak.demo.dto.user.UpdateUserDto;
 import com.nak.demo.dto.user.UserResponseDto;
 import com.nak.demo.dto.user.UserDto;
 import com.nak.demo.service.UserService;
+import com.nak.demo.service.security.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,8 @@ import java.util.List;
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private AuthService authService;
 
     @GetMapping()
     public ResponseEntity<Response> listUsers() {
@@ -33,12 +36,6 @@ public class UserController {
         UserResponseDto user = userService.getUser(userId);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(Response.success("200","success","successfully retrieved user id number: " ,user));
-    }
-    @PostMapping
-    public ResponseEntity<Response> createUser(@Valid  @RequestBody UserDto payload) {
-         userService.createUser( payload);
-         return ResponseEntity.status(HttpStatus.CREATED)
-                 .body(Response.success("201","success","successfully created user"));
     }
 
     @PutMapping("/{user_id}")
