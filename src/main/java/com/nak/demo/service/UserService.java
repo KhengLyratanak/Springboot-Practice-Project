@@ -30,36 +30,39 @@ public class UserService implements UserDetailsService {
     @Autowired
     private JwtUtil jwtUtil;
 
-    public List<UserResponseDto> listUser(){
+    public List<UserResponseDto> listUser() {
         List<User> users = userRepository.findAll();
         List<UserResponseDto> dtos = mapper.toDtoList(users);
         return mapper.toDtoList(users);
     }
-    public UserResponseDto getUser(Long userId){
+
+    public UserResponseDto getUser(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("user not found with id :"  +userId));
+                        new ResourceNotFoundException("user not found with id :" + userId));
 
         String token = jwtUtil.generateToken(user);
-        System.out.println("Token: " +token);
-            return mapper.toDto(user);
+        System.out.println("Token: " + token);
+        return mapper.toDto(user);
 
     }
-    public void updateUser(UpdateUserDto payload, Long userId){
-       User existing = userRepository.findById(userId)
+
+    public void updateUser(UpdateUserDto payload, Long userId) {
+        User existing = userRepository.findById(userId)
 //IF USER NOT FOUND then response 404
-        .orElseThrow(() ->
-             new ResourceNotFoundException("user not found with id :"  +userId ));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("user not found with id :" + userId));
 
-      mapper.updateEntityFromDto(existing,payload);
+        mapper.updateEntityFromDto(existing, payload);
 
-       userRepository.save(existing);
+        userRepository.save(existing);
 
     }
-    public void deleteUser( Long userId) {
 
-        if(!userRepository.existsById(userId)) {
-            throw new ResourceNotFoundException("user not found with id :"  +userId);
+    public void deleteUser(Long userId) {
+
+        if (!userRepository.existsById(userId)) {
+            throw new ResourceNotFoundException("user not found with id :" + userId);
         }
 
         // user found , then delete
@@ -67,13 +70,15 @@ public class UserService implements UserDetailsService {
 
 
     }
-    public List<UserResponseDto> findUser(String name){
-        String formattedName = name  !=null ?
+
+    public List<UserResponseDto> findUser(String name) {
+        String formattedName = name != null ?
                 name.toLowerCase()
-                :name;
+                : name;
         List<User> user = userRepository.findUserWithFilters(formattedName);
-       return mapper.toDtoList(user);
+        return mapper.toDtoList(user);
     }
+
     public void changePassword(ChangePasswordDto dto, Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() ->
@@ -93,8 +98,8 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByName(username)
-                .orElseThrow( () ->{ throw new UsernameNotFoundException("user not found" +username);
+                .orElseThrow(() -> {
+                    throw new UsernameNotFoundException("user not found" + username);
                 });
     }
-
 }
