@@ -4,6 +4,7 @@ package com.nak.demo.service.security;
 import com.nak.demo.dto.auth.AuthDto;
 import com.nak.demo.dto.auth.AuthResponseDto;
 import com.nak.demo.dto.user.UserDto;
+import com.nak.demo.entity.RefreshToken;
 import com.nak.demo.entity.User;
 import com.nak.demo.exception.model.DuplicateException;
 import com.nak.demo.mapper.UserMapper;
@@ -37,6 +38,9 @@ public class AuthService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private RefreshTokenService refreshTokenService;
+
     public AuthResponseDto register(UserDto payload){
 
         if(userRepository.existsByName(payload.getName())){
@@ -52,7 +56,8 @@ public class AuthService {
      User createdUser = userRepository.save(user);
      String accessToken = jwtUtil.generateToken(createdUser);
 
-     return new AuthResponseDto(accessToken,null);
+     RefreshToken refreshToken = refreshTokenService.createRefreshToken(user);
+     return new AuthResponseDto(accessToken,refreshToken.getToken());
     }
     public AuthResponseDto login(AuthDto payload){
         authenticationManager.authenticate(
@@ -61,6 +66,9 @@ public class AuthService {
         UserDetails userDetails = userService.loadUserByUsername(payload.getUsername());
         String accessToken = jwtUtil.generateToken(userDetails);
 
-        return new AuthResponseDto(accessToken,null);
+        //generate refresh token
+        User user = (User) userDetails;
+        RefreshToken refreshToken =  refreshTokenService.createRefreshToken(user);
+        return new AuthResponseDto(accessToken,refreshToken.getToken());
     }
 }
