@@ -3,6 +3,8 @@ package com.nak.demo.service.security;
 
 import com.nak.demo.dto.auth.AuthDto;
 import com.nak.demo.dto.auth.AuthResponseDto;
+import com.nak.demo.dto.auth.RefreshTokenDto;
+import com.nak.demo.dto.auth.RefreshTokenResponeDto;
 import com.nak.demo.dto.user.UserDto;
 import com.nak.demo.entity.RefreshToken;
 import com.nak.demo.entity.User;
@@ -16,6 +18,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import javax.naming.AuthenticationException;
+import java.util.Optional;
 
 @Service
 public class AuthService {
@@ -70,5 +75,26 @@ public class AuthService {
         User user = (User) userDetails;
         RefreshToken refreshToken =  refreshTokenService.createRefreshToken(user);
         return new AuthResponseDto(accessToken,refreshToken.getToken());
+    }
+
+    public RefreshTokenResponeDto refreshToken (RefreshTokenDto payload) {
+        String token = payload.getRefreshToken();
+        // find by token
+       RefreshToken refreshToken = refreshTokenService.findByToken(token);
+
+       try{
+           refreshToken = refreshTokenService.verifyToken(refreshToken);
+
+       }catch (AuthenticationException e){
+            return null;
+       }
+        //get user from refresh token
+        User user = refreshToken.getUser();
+
+        // generate new access token
+        String newAccessToken = jwtUtil.generateToken(user);
+        //rotate refresh token
+        RefreshToken newRefreshToken = refreshTokenService.rotateRefreshToken(refreshToken);
+           return new RefreshTokenResponeDto(newAccessToken,newRefreshToken.getToken(),"Bearer ");
     }
 }

@@ -2,6 +2,8 @@ package com.nak.demo.controller;
 
 import com.nak.demo.dto.auth.AuthDto;
 import com.nak.demo.dto.auth.AuthResponseDto;
+import com.nak.demo.dto.auth.RefreshTokenDto;
+import com.nak.demo.dto.auth.RefreshTokenResponeDto;
 import com.nak.demo.dto.base.Response;
 import com.nak.demo.dto.user.UserDto;
 import com.nak.demo.service.security.AuthService;
@@ -33,5 +35,12 @@ public class AuthController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(Response.success("200","success","successfully login",dto));
+    }
+    @PostMapping("/refresh")
+    public ResponseEntity<Response> refreshToken (@Valid @RequestBody RefreshTokenDto payload){
+        RefreshTokenResponeDto dto = authService.refreshToken(payload);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(Response.success("200","success","successfully refreshed token ",dto));
+
     }
 }

@@ -1,11 +1,14 @@
 package com.nak.demo.service.security;
 
+import com.nak.demo.dto.auth.RefreshTokenDto;
 import com.nak.demo.entity.RefreshToken;
 import com.nak.demo.entity.User;
+import com.nak.demo.exception.model.ResourceNotFoundException;
 import com.nak.demo.repository.RefreshTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.naming.AuthenticationException;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -14,10 +17,10 @@ public class RefreshTokenService {
     @Autowired
     private RefreshTokenRepository refreshTokenRepository;
 
-    public RefreshToken createRefreshToken(User user){
+    public RefreshToken createRefreshToken(User user) {
         String refreshToken = UUID.randomUUID().toString();
 
-        RefreshToken entity =  new RefreshToken();
+        RefreshToken entity = new RefreshToken();
 
         entity.setToken(refreshToken);
         entity.setExpiresAt(LocalDateTime.now().plusHours(3));
@@ -25,4 +28,27 @@ public class RefreshTokenService {
 
         return refreshTokenRepository.save(entity);
     }
+
+    public RefreshToken findByToken(String token) {
+        return refreshTokenRepository.findByToken(token)
+                .orElseThrow(() -> new ResourceNotFoundException("Refresh token is invalid"));
+    }
+
+    public RefreshToken verifyToken(RefreshToken token) throws AuthenticationException {
+        if (!token.isValid()) {
+            refreshTokenRepository.delete(token);
+            throw new AuthenticationException("Refresh token was expired or revoked");
+        }
+        return token;
+    }
+
+    public RefreshToken rotateRefreshToken(RefreshToken oldToken) {
+        // revoke old rf token
+        oldToken.setRevoked(true);
+        refreshTokenRepository.save(oldToken);
+
+        //generate new rf token
+        return this.createRefreshToken(oldToken.getUser());
+    }
+
 }
